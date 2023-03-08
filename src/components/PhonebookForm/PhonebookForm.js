@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import s from './PhonebookForm.module.css';
 import { nanoid } from 'nanoid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { addContact } from 'redux/contactSlice';
 
 const PhonebookForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contacts = useSelector(state => state.contacts.contacts);
 
   const dispatch = useDispatch();
 
@@ -27,6 +29,15 @@ const PhonebookForm = () => {
       name,
       number,
     };
+
+    const checkedName = contacts.find(
+      contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
+    );
+
+    if (checkedName) {
+      alert('This Name already exist!');
+      return;
+    }
 
     dispatch(addContact(newContact));
     setName('');
