@@ -11,4 +11,6 @@
 .ContactList__deleteBtn {
   margin-left: 20px;
   color: red;
+  border-radius: 5px;
+  cursor: pointer;
 }

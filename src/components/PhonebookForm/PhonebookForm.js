@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import s from './PhonebookForm.module.css';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
-const PhonebookForm = ({ onSubmit }) => {
+import { addContact } from 'redux/contactSlice';
+
+const PhonebookForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const dispatch = useDispatch();
 
   const handleNameChange = e => {
     setName(e.target.value);
@@ -15,21 +19,22 @@ const PhonebookForm = ({ onSubmit }) => {
     setNumber(e.target.value);
   };
 
-  const handleSubmit = e => {
+  const onAddContact = e => {
     e.preventDefault();
+
     const newContact = {
       id: nanoid(),
       name,
       number,
     };
 
-    onSubmit(newContact);
+    dispatch(addContact(newContact));
     setName('');
     setNumber('');
   };
 
   return (
-    <form className={s.Form} onSubmit={handleSubmit}>
+    <form className={s.Form} onSubmit={onAddContact}>
       <label className={s.Label}>
         Name
         <input
@@ -61,10 +66,6 @@ const PhonebookForm = ({ onSubmit }) => {
       </button>
     </form>
   );
-};
-
-PhonebookForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default PhonebookForm;

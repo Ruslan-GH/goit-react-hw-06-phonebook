@@ -1,12 +1,22 @@
 import React from 'react';
 import { nanoid } from 'nanoid';
 import s from './Contacts.module.css';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 
-const Contacts = ({ contacts, onDeleteContact }) => {
+import { deleteContact } from 'redux/contactSlice';
+import selectedFilteredContacts from 'redux/selectors';
+
+const Contacts = () => {
+  const dispatch = useDispatch();
+  const filteredContacts = useSelector(selectedFilteredContacts);
+
+  const onDeleteContact = id => {
+    dispatch(deleteContact(id));
+  };
+
   return (
     <ul className={s.ContactList}>
-      {contacts.map(contact => (
+      {filteredContacts.map(contact => (
         <li key={nanoid()} className={s.ContactList__item}>
           <p>
             {contact.name}: {contact.number}
@@ -21,17 +31,6 @@ const Contacts = ({ contacts, onDeleteContact }) => {
       ))}
     </ul>
   );
-};
-
-Contacts.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  onDeleteContact: PropTypes.func.isRequired,
 };
 
 export default Contacts;
